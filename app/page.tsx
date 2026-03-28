@@ -26,16 +26,16 @@ const features = [
 ]
 
 const testimonials = [
-  { name: 'Priya Sharma', role: 'Patient', text: 'Shifa AI helped me understand my prescriptions so clearly. I feel informed and confident now.', rating: 5 },
-  { name: 'Dr. Arjun Mehta', role: 'General Physician', text: 'I recommend this to all my patients. The drug info accuracy is impressive and the UI is beautiful.', rating: 5 },
-  { name: 'Fatima Al-Rashid', role: 'Caregiver', text: 'Managing my mother\'s medications has never been easier. The reminders are a lifesaver.', rating: 5 },
+  { name: 'Jhon Doe', role: 'Patient', text: 'MedWise helped me understand my prescriptions so clearly. I feel informed and confident now.', rating: 5 },
+  { name: 'Dr. Dummy User', role: 'General Physician', text: 'I recommend this to all my patients. The drug info accuracy is impressive and the UI is beautiful.', rating: 5 },
+  { name: 'Dummy Caregiver', role: 'Caregiver', text: 'Managing my mother\'s medications has never been easier. The reminders are a lifesaver.', rating: 5 },
 ]
 
 const stats = [
-  { value: '50K+', label: 'Medicines in database' },
-  { value: '200K+', label: 'Active users' },
-  { value: '99.9%', label: 'Uptime reliability' },
-  { value: '4.9★', label: 'App store rating' },
+  { value: '50K+', label: 'Mockups in database' },
+  { value: '200K+', label: 'mockup users' },
+  { value: '99.9%', label: 'Uptime mockup' },
+  { value: '4.9★', label: 'Mockup rating' },
 ]
 
 export default function LandingPage() {
@@ -296,7 +296,7 @@ export default function LandingPage() {
 
             {/* Features listed */}
             <div className="mt-6 pt-5 border-t border-cream-200">
-              {['Free forever plan available', 'No credit card required', 'HIPAA-compliant & secure'].map((item) => (
+              {['No credit card required', 'HIPAA-compliant & secure'].map((item) => (
                 <div key={item} className="flex items-center gap-2.5 text-xs text-sage-500 mt-2">
                   <Check size={13} className="text-sage-500 shrink-0" />
                   {item}
