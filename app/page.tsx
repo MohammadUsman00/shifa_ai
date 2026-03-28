@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { type MouseEvent, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { signIn, useSession } from 'next-auth/react'
 import Navbar from '@/components/Navbar'
 import FlaticonIcon from '@/components/FlaticonIcon'
 import {
@@ -25,7 +26,7 @@ const features = [
 ]
 
 const testimonials = [
-  { name: 'Priya Sharma', role: 'Patient', text: 'MedWise helped me understand my prescriptions so clearly. I feel informed and confident now.', rating: 5 },
+  { name: 'Priya Sharma', role: 'Patient', text: 'Shifa AI helped me understand my prescriptions so clearly. I feel informed and confident now.', rating: 5 },
   { name: 'Dr. Arjun Mehta', role: 'General Physician', text: 'I recommend this to all my patients. The drug info accuracy is impressive and the UI is beautiful.', rating: 5 },
   { name: 'Fatima Al-Rashid', role: 'Caregiver', text: 'Managing my mother\'s medications has never been easier. The reminders are a lifesaver.', rating: 5 },
 ]
@@ -49,6 +50,25 @@ export default function LandingPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
+  const [callbackUrl, setCallbackUrl] = useState('/dashboard')
+  const { status } = useSession()
+  const authLoading = status === 'loading'
+
+  const handleGoogleSignIn = async () => {
+    if (status === 'authenticated') return
+    await signIn('google', { callbackUrl })
+  }
+
+  const handlePrimaryAuthClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (status === 'authenticated' || authLoading) return
+    event.preventDefault()
+    void handleGoogleSignIn()
+  }
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    setCallbackUrl(params.get('callbackUrl') || '/dashboard')
+  }, [])
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -237,7 +257,12 @@ export default function LandingPage() {
                 />
               </div>
 
-              <Link href="/dashboard" className="btn-primary w-full justify-center mt-2 text-sm py-3.5">
+              <Link
+                href="/dashboard"
+                onClick={handlePrimaryAuthClick}
+                className={`btn-primary w-full justify-center mt-2 text-sm py-3.5 ${authLoading ? 'pointer-events-none opacity-80' : ''}`}
+                aria-disabled={authLoading}
+              >
                 {authMode === 'signup' ? 'Create Account' : 'Sign In'}
                 <ArrowRight size={15} />
               </Link>
@@ -253,7 +278,13 @@ export default function LandingPage() {
             {/* Social Auth */}
             <div className="grid grid-cols-2 gap-3">
               {['Google', 'Apple'].map((p) => (
-                <button key={p} className="btn-ghost text-sm py-2.5 justify-center">
+                <button
+                  key={p}
+                  type="button"
+                  onClick={p === 'Google' ? () => void handleGoogleSignIn() : undefined}
+                  className={`btn-ghost text-sm py-2.5 justify-center ${authLoading ? 'pointer-events-none opacity-80' : ''}`}
+                  disabled={authLoading}
+                >
                   <FlaticonIcon
                     icon={p === 'Google' ? 'fi-brands-google' : 'fi-brands-apple'}
                     className="text-sm"
@@ -361,7 +392,7 @@ export default function LandingPage() {
             Take charge of your health today.
           </h2>
           <p className="text-sage-400 text-lg mb-10">
-            Join over 200,000 people who trust MedWise to understand their medications and manage their health smartly.
+            Join over 200,000 people who trust Shifa AI to understand their medications and manage their health smartly.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link href="/dashboard" className="btn-primary text-base py-4 px-8">
@@ -379,9 +410,9 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-2">
             <Activity size={16} className="text-sage-400" />
-            <span className="font-display text-cream-200 font-semibold">MedWise</span>
+            <span className="font-display text-cream-200 font-semibold">Shifa AI</span>
           </div>
-          <p className="text-sage-500 text-sm">© {new Date().getFullYear()} MedWise. All rights reserved.</p>
+          <p className="text-sage-500 text-sm">© {new Date().getFullYear()} Shifa AI. All rights reserved.</p>
           <div className="flex gap-6 text-sage-500 text-sm">
             <Link href="#" className="hover:text-sage-300 transition-colors">Privacy</Link>
             <Link href="#" className="hover:text-sage-300 transition-colors">Terms</Link>

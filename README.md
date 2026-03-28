@@ -1,4 +1,4 @@
-# MedWise — AI-Powered Health Companion
+# Shifa AI - AI-Powered Health Companion
 
 A **3-page Next.js 14** web application with GSAP animations, built with a refined sage/cream color palette and editorial design aesthetic.
 
@@ -29,6 +29,19 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
+
+## Deployment
+
+For the simplest Vercel Hobby deployment flow, see [DEPLOYMENT.md](./DEPLOYMENT.md).
+
+The short version:
+
+1. Run `npx convex dev` locally once.
+2. Set `GEMINI_*` in Convex production with `npx convex env set --prod ...`.
+3. Import the repo into Vercel.
+4. Set the Vercel build command to `npx convex deploy --cmd "npm run build"`.
+5. Add Google OAuth + auth env vars in Vercel.
+6. Add your production Vercel URL to Google OAuth origins and redirect URIs.
 
 ## Key Features
 

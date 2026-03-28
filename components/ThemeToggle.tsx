@@ -5,12 +5,13 @@ import FlaticonIcon from '@/components/FlaticonIcon'
 
 type Theme = 'light' | 'dark'
 
-const STORAGE_KEY = 'medwise-theme'
+const STORAGE_KEY = 'shifa-ai-theme'
+const LEGACY_STORAGE_KEY = 'medwise-theme'
 
 function getPreferredTheme(): Theme {
   if (typeof window === 'undefined') return 'light'
 
-  const storedTheme = window.localStorage.getItem(STORAGE_KEY)
+  const storedTheme = window.localStorage.getItem(STORAGE_KEY) || window.localStorage.getItem(LEGACY_STORAGE_KEY)
   if (storedTheme === 'light' || storedTheme === 'dark') {
     return storedTheme
   }

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Playfair_Display, DM_Sans, DM_Mono } from 'next/font/google'
+import AuthSessionProvider from '@/components/AuthSessionProvider'
 import './globals.css'
 
 const playfair = Playfair_Display({
@@ -22,7 +23,7 @@ const dmMono = DM_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'MedWise — Your Health Companion',
+  title: 'Shifa AI - Your Health Companion',
   description: 'Search medicines, book appointments, and manage your health with intelligence.',
 }
 
@@ -39,7 +40,7 @@ export default function RootLayout({
             __html: `
               (function () {
                 try {
-                  var stored = localStorage.getItem('medwise-theme');
+                  var stored = localStorage.getItem('shifa-ai-theme') || localStorage.getItem('medwise-theme');
                   var system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                   var theme = stored === 'dark' || stored === 'light' ? stored : system;
                   document.documentElement.dataset.theme = theme;
@@ -52,7 +53,7 @@ export default function RootLayout({
             `,
           }}
         />
-        {children}
+        <AuthSessionProvider>{children}</AuthSessionProvider>
       </body>
     </html>
   )

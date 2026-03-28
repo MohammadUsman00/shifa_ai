@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { gsap } from 'gsap'
+import { signOut, useSession } from 'next-auth/react'
 import { Activity, Menu, X } from 'lucide-react'
 import ThemeToggle from '@/components/ThemeToggle'
 
@@ -19,6 +20,14 @@ export default function Navbar() {
   const logoRef = useRef<HTMLDivElement>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const { status } = useSession()
+  const isAuthenticated = status === 'authenticated'
+
+  const handleAuthClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!isAuthenticated) return
+    event.preventDefault()
+    void signOut({ callbackUrl: '/' })
+  }
 
   useEffect(() => {
     // GSAP entrance animation
@@ -58,9 +67,7 @@ export default function Navbar() {
                 <div className="w-9 h-9 rounded-xl bg-sage-600 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-200">
                   <Activity size={18} className="text-white" />
                 </div>
-                <span className="font-display text-xl font-bold text-sage-800">
-                  Med<span className="text-sage-500">Wise</span>
-                </span>
+                <span className="font-display text-xl font-bold text-sage-800">Shifa <span className="text-sage-500">AI</span></span>
               </Link>
             </div>
 
@@ -84,7 +91,9 @@ export default function Navbar() {
             {/* Desktop CTA */}
             <div className="hidden md:flex items-center gap-3">
               <ThemeToggle />
-              <Link href="/" className="btn-ghost text-sm py-2 px-4">Sign In</Link>
+              <Link href="/" onClick={handleAuthClick} className="btn-ghost text-sm py-2 px-4">
+                {isAuthenticated ? 'Sign Out' : 'Sign In'}
+              </Link>
               </div>
 
             {/* Mobile Hamburger */}
@@ -135,7 +144,16 @@ export default function Navbar() {
               </Link>
             ))}
             <div className="mt-4 pt-4 border-t border-cream-200 flex flex-col gap-2">
-              <Link href="/" onClick={() => setMenuOpen(false)} className="btn-ghost w-full justify-center text-sm">Sign In</Link>
+              <Link
+                href="/"
+                onClick={(event) => {
+                  setMenuOpen(false)
+                  handleAuthClick(event)
+                }}
+                className="btn-ghost w-full justify-center text-sm"
+              >
+                {isAuthenticated ? 'Sign Out' : 'Sign In'}
+              </Link>
             </div>
           </div>
         </div>
